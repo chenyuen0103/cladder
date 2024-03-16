@@ -35,18 +35,21 @@ ask_about = [
 
 openai_key_alias = 'OPENAI_API_KEY'
 
-root_path = '../../../../2304_caubench/'
-data_name = 'cladder-v1/cladder-v1-q-balanced'
+# root_path = '../../../../2304_caubench/'
+root_path = '..'
+# data_name = 'cladder-v1/cladder-v1-q-balanced'
+data_name = 'cladder-v1-q-balanced'
 
-models_data_name = 'cladder-v1/cladder-v1-meta-models'
-with open(f'{root_path}/data/{models_data_name}.json', 'r') as f:
+# models_data_name = 'cladder-v1/cladder-v1-meta-models'
+models_data_name = 'cladder-v1-meta-models'
+with open(f'{root_path}/data/cladder-v1/{models_data_name}.json', 'r') as f:
     import json
 
     meta_models = json.load(f)
 
 
 class DataFileList:
-    def __init__(self, file_pattern=f'{root_path}/data/{data_name}.json'):
+    def __init__(self, file_pattern=f'{root_path}/data/cladder-v1/{data_name}.json'):
         from glob import glob
 
         data_files = sorted(glob(file_pattern))
@@ -112,9 +115,10 @@ class DataFile:
                                          f" {datum['question'].strip()}".replace(' ', ' ')
         datum2raw_prompt_without_q = lambda datum: f"{datum['background'].strip()}" \
                                                    f" {datum['given_info'].strip()}".replace(' ', ' ')
-        ids_to_exclude = self.get_ids_to_exclude()
+        # ids_to_exclude = self.get_ids_to_exclude()
         show_var(['len(data)'])
-        data = [i for i in data if i['question_id'] not in ids_to_exclude]
+        # data = [i for i in data if i['question_id'] not in ids_to_exclude]
+        data = [i for i in data]
         show_var(['len(data)'])
 
         new_data = []
@@ -542,6 +546,7 @@ class Scorer:
         return df
 
     def truth_pred_scorer(self, df):
+        breakpoint()
         df.drop(['prompt', 'question_id'], axis=1, inplace=True)
 
         df = self.apply_score_func(df)
